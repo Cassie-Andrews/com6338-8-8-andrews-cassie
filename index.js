@@ -1,9 +1,13 @@
 // Your code here
-var URL = "https://api.openweathermap.org/data/2.5/weather";
+var weatherURL = "https://api.openweathermap.org/data/2.5/weather";
+var queryString = "?units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48&q=" + userQuery
+var fetchURL = weatherURL + queryString
+
 var weatherAppDiv = document.getElementById('weather-app');
 var form = document.querySelector('form');
 
-// https://api.openweathermap.org/data/2.5/weather?zip=34205&appid=a8b8566d914e7ee5f3e4973ebeb94b48
+// end point URL: https://api.openweathermap.org/data/2.5/weather?q={cityname}&units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48
+
 
 // API Key: a8b8566d914e7ee5f3e4973ebeb94b48
 
@@ -15,7 +19,7 @@ var form = document.querySelector('form');
 form.onsubmit = function(e) {
     e.preventDefault();
     // console.log('click');
-    fetch(URL)
+    fetch(fetchURL)
     .then(function(res) {
         return res.json()
     })
