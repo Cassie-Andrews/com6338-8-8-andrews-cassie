@@ -1,9 +1,15 @@
 // Your code here
+var weatherAppDiv = document.getElementById('weather-app');
+var formSection = document.getElementById('weather');
+var inputField = document.getElementsById('weather-search');
+var inputFieldLabel = document.querySelector('label');
+var submitButton = document.querySelector('button');
 
-window.onload = function() {
-    // When the app loads, only the input field and search button should be visible
-        // create form with input field and submit button
-}
+
+// When the app loads
+    // only the input field and search button should be visible
+    // already in the HTML
+
 
 // ON SUBMIT 
     // app should call the Open Weather API's current weather endpoint using the JS fetch API to obtain weather data based on location entered by the user
