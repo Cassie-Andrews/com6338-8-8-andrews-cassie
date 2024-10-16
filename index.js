@@ -9,7 +9,7 @@ var apiKey = 'a8b8566d914e7ee5f3e4973ebeb94b48';
 var weatherAppDiv = document.getElementById('weather-app');
 var form = document.querySelector('form');
 var input = document.getElementById('weather-search');
-var weatherDisplay = document.getElementById('weather');
+const weatherDisplay = document.getElementById('weather');
 
 // When the app loads
     // only the input field and search button should be visible
@@ -20,11 +20,10 @@ var weatherDisplay = document.getElementById('weather');
 form.onsubmit = function(e) {
     e.preventDefault();
 
-    var userQuery = input.value;
+    var userQuery = input.value.trim();
     console.log(userQuery);
 
     if (!userQuery) return; // if no input, exit
-    
     // construct the fetch URL
     var queryString = '?units=imperial&appid=' + apiKey + '&q=' + userQuery;
     var fetchURL = weatherURL + queryString;
@@ -33,18 +32,19 @@ form.onsubmit = function(e) {
     fetch(fetchURL)
         .then(function(res) {
             if (!res.ok) { // LOCATION NOT FOUND
+            // notify the user that the location was not found
+            // create <h2>Location not found</h2> above the form
                 var h2 = document.createElement('h2');
                 h2.textContent = 'Location not found';
-                weatherAppDiv.appendChild(h2)
-                // display "Location not found"
-            } else { // LOCATION FOUND
-                return res.json(); // if user entered search term that is found, retrieve data
-            }
+                weatherDisplay.innerHTML = ''; // clear
+                weatherDisplay.appendChild(h2); // display "Location not found"
+            }  // LOCATION FOUND
+            return res.json(); // if user entered search term that is found, retrieve data
         })
         .then(function(data) { // UPDATE DISPLAY
             console.log(data);
             updateDisplay(data);// call function to display weather info
-        })
+        });
 }
     
     
@@ -56,31 +56,50 @@ form.onsubmit = function(e) {
 
 // DISPLAY CURRENT WEATHER INFO       
 function updateDisplay(data) {
-    var city = 'city.name'; // city code
-    var country = 'sys.country'; // country code
+    weatherDisplay.innerHTML = ''; // clear
+
+    var city = data.name; // city code
+    var country = data.sys.country; // country code
     var mapLink = ''; // google maps link to location
-    var weatherIcon = 'weather[0].icon'; // weather icon representing current conditions
-    var weatherDescription = 'weather[0].description'; // description of current weather
-    var currentTemp = 'main.temp'; // actual temp
-    var feelsLike = 'main.feels_like'; // feels like temp
-    var lastUpdated = 'lastupdate.value'; // time last updated   
+    var weatherIcon = data.weather[0].icon; // weather icon representing current conditions
+    var weatherDescription = data.weather[0].description; // description of current weather
+    var currentTemp = data.main.temp; // actual temp
+    var feelsLike = data.feels_like; // feels like temp
+    var lastUpdated = data.lastupdate.value; // time last updated   
 
-    weatherDisplay.innerHTML = `
-        <h2> </h2>
-        <a href="" target="_BLANK"> </a>
-        <img src="">
-        <p style="text-transform: capitalize;"> </p><br>
-        <p> </p>
-        <p> </p>
-        <p> </p>
-    `;
+    var locationDisplay = document.createElement('h2');
+    locationDisplay.textContent = city + ',' + country;
+    weatherDisplay.appendChild(locationDisplay);
+
+    var mapLinkDisplay = document.createElement('a');
+    mapLinkDisplay.textContent = mapLink;
+    weatherDisplay.appendChild(mapLinkDisplay);
+        // <a href="" target="_BLANK"/a>
+
+    var weatherIconDisplay = document.createElement('img');
+    weatherIconDisplay.src = weatherIcon;
+    weatherIconDisplay.innerText = 'Click to view map';
+    weatherDisplay.appendChild(weatherIconDisplay);
+        // <img src="">
+
+    var weatherDescriptionDisplay = document.createElement('p');
+    weatherDescriptionDisplay.textContent = weatherDescription;
+    weatherDisplay.appendChild(weatherDescriptionDisplay);
+        // <p style="text-transform: capitalize;"> </p><br>
+
+    var currentTempDisplay = document.createElement('p');
+    currentTempDisplay.textContent = currentTemp;
+    weatherDisplay.appendChild(currentTempDisplay);
+        // <p>Current: 53.74° F</p>
+
+    var feelsLikeDisplay = document.createElement('p');
+    feelsLikeDisplay.textContent = feelsLike;
+    weatherDisplay.appendChild(feelsLikeDisplay);
+        // <p>Feels like: 51.69° F</p><br>
+
+    var lastUpdatedDisplay = document.createElement('p');
+    lastUpdatedDisplay.textContent = lastUpdated;
+    weatherDisplay.appendChild(lastUpdatedDisplay);
+        // <p>Last updated: 11:00 PM</p>
+    ;
 }
-
-
-
-// else user entered search term that does not retrieve weather data
-    // LOCATION NOT FOUND message
-    // notify the user that the location was not found
-        // create <h2>Location not found</h2> above the form
-
-
