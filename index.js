@@ -35,12 +35,8 @@ form.onsubmit = function(e) {
             if (!response.ok) { // LOCATION NOT FOUND
                 if (response.status === 404) {
                     // notify the user that the location was not found
-                    // create <h2>Location not found</h2> above the form
-                    var h2 = document.createElement('h2');
-                    h2.textContent = 'Location not found';
+                    showLocationNotFound();
                     input.value = ''; // clear inpur value
-                    weatherDisplay.innerHTML = ''; // clear
-                    weatherDisplay.appendChild(h2); // display "Location not found"
                 }
                 return; // exit if not found
             }  // LOCATION FOUND
@@ -52,9 +48,16 @@ form.onsubmit = function(e) {
                 updateDisplay(data); // call function to display weather info
                 input.value = ''; // clear input value
             }
-    });
+        });
 }
-    
+
+function showLocationNotFound() {
+    // create <h2>Location not found</h2> above the form
+    var h2 = document.createElement('h2');
+    h2.textContent = 'Location not found';
+    weatherDisplay.innerHTML = ''; // clear
+    weatherDisplay.appendChild(h2); // display "Location not found"
+}
     
     // input field's value is reset with each form submission
     // additional searches should not cause additional weather data to be added to the #weather element
