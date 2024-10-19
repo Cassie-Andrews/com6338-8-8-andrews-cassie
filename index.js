@@ -24,27 +24,35 @@ form.onsubmit = function(e) {
     console.log(userQuery);
 
     if (!userQuery) return; // if no input, exit
+
     // construct the fetch URL
     var queryString = '?units=imperial&appid=' + apiKey + '&q=' + userQuery;
     var fetchURL = weatherURL + queryString;
 
     // app should call the Open Weather API's current weather endpoint using the JS fetch API to obtain weather data based on location entered by the user
     fetch(fetchURL)
-        .then(function(res) {
-            if (!res.ok) { // LOCATION NOT FOUND
-            // notify the user that the location was not found
-            // create <h2>Location not found</h2> above the form
-                var h2 = document.createElement('h2');
-                h2.textContent = 'Location not found';
-                weatherDisplay.innerHTML = ''; // clear
-                weatherDisplay.appendChild(h2); // display "Location not found"
+        .then(function(response) {
+            if (!response.ok) { // LOCATION NOT FOUND
+                if (response.status === 404) {
+                    // notify the user that the location was not found
+                    // create <h2>Location not found</h2> above the form
+                    var h2 = document.createElement('h2');
+                    h2.textContent = 'Location not found';
+                    input.value = ''; // clear inpur value
+                    weatherDisplay.innerHTML = ''; // clear
+                    weatherDisplay.appendChild(h2); // display "Location not found"
+                }
+                return; // exit if not found
             }  // LOCATION FOUND
-            return res.json(); // if user entered search term that is found, retrieve data
+            return response.json(); // if user entered search term that is found, retrieve data
         })
         .then(function(data) { // UPDATE DISPLAY
-            console.log(data);
-            updateDisplay(data);// call function to display weather info
-        });
+            if (data) {
+                console.log(data);
+                updateDisplay(data); // call function to display weather info
+                input.value = ''; // clear input value
+            }
+    });
 }
     
     
@@ -65,10 +73,10 @@ function updateDisplay(data) {
     var weatherDescription = data.weather[0].description; // description of current weather
     var currentTemp = data.main.temp; // actual temp
     var feelsLike = data.feels_like; // feels like temp
-    var lastUpdated = data.lastupdate.value; // time last updated   
+    var lastUpdated = ''; // time last updated   
 
     var locationDisplay = document.createElement('h2');
-    locationDisplay.textContent = city + ',' + country;
+    locationDisplay.textContent = city + ', ' + country;
     weatherDisplay.appendChild(locationDisplay);
 
     var mapLinkDisplay = document.createElement('a');
