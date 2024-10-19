@@ -1,9 +1,14 @@
-// end point URL: https://api.openweathermap.org/data/2.5/weather?q={cityname}&units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48
 
+// Geocoder API to convert city names and zip codes to geo coords
+// API call: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+    // ?q={user input}
+    // &limit=1
+    // &appid=a8b8566d914e7ee5f3e4973ebeb94b48
 // API Key: a8b8566d914e7ee5f3e4973ebeb94b48
 
+// GEOCODER var weatherURL = 'http://api.openweathermap.org/geo/1.0/direct';
 var weatherURL = 'https://api.openweathermap.org/data/2.5/weather';
-var apiKey = 'a8b8566d914e7ee5f3e4973ebeb94b48';
+// var apiKey = 'a8b8566d914e7ee5f3e4973ebeb94b48';
 
 
 var weatherAppDiv = document.getElementById('weather-app');
@@ -26,8 +31,14 @@ form.onsubmit = function(e) {
     if (!userQuery) return; // if no input, exit
 
     // construct the fetch URL
-    var queryString = '?units=imperial&appid=' + apiKey + '&q=' + userQuery;
+    var queryString = '?q=' + userQuery + '&appid=a8b8566d914e7ee5f3e4973ebeb94b48';
+        // '&units=imperial'
     var fetchURL = weatherURL + queryString;
+        // full API call: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+            // ?q={user input}
+            // &limit=1
+            // &appid=a8b8566d914e7ee5f3e4973ebeb94b48
+            // API Key: a8b8566d914e7ee5f3e4973ebeb94b48
 
     // app should call the Open Weather API's current weather endpoint using the JS fetch API to obtain weather data based on location entered by the user
     fetch(fetchURL)
@@ -72,7 +83,7 @@ function updateDisplay(data) {
     var city = data.name; // city code
     var country = data.sys.country; // country code
     var mapLink = ''; // google maps link to location
-    var weatherIcon = data.weather[0].icon; // weather icon representing current conditions
+    var weatherIcon = 'https://openweathermap.org/img/wn/' + data.weather[0] + '@2x.png'; // weather icon representing current conditions
     var weatherDescription = data.weather[0].description; // description of current weather
     var currentTemp = data.main.temp; // actual temp
     var feelsLike = data.feels_like; // feels like temp
@@ -83,7 +94,9 @@ function updateDisplay(data) {
     weatherDisplay.appendChild(locationDisplay);
 
     var mapLinkDisplay = document.createElement('a');
-    mapLinkDisplay.textContent = mapLink;
+    mapLinkDisplay.href = mapLink;
+    mapLinkDisplay.target = "_blank";
+    mapLinkDisplay.tectContent = "Click to view map";
     weatherDisplay.appendChild(mapLinkDisplay);
         // <a href="" target="_BLANK"/a>
 
