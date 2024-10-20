@@ -31,7 +31,7 @@ form.onsubmit = function(e) {
     if (!userQuery) return; // if no input, exit
 
     // construct the fetch URL
-    var queryString = '?q=' + userQuery + '&appid=a8b8566d914e7ee5f3e4973ebeb94b48';
+    var queryString = '?q=' + userQuery + '&units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48';
         // '&units=imperial'
     var fetchURL = weatherURL + queryString;
         // full API call: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
@@ -80,14 +80,24 @@ function showLocationNotFound() {
 function updateDisplay(data) {
     weatherDisplay.innerHTML = ''; // clear
 
+    console.log(
+        data.name,
+        data.sys.city,
+        data.sys.country,
+        data.weather[0],
+        data.main.temp,
+        data.feels_like,
+        data.dt
+    );
+
     var city = data.name; // city code
     var country = data.sys.country; // country code
     var mapLink = ''; // google maps link to location
-    var weatherIcon = 'https://openweathermap.org/img/wn/' + data.weather[0] + '@2x.png'; // weather icon representing current conditions
+    var weatherIcon = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'; // weather icon representing current conditions
     var weatherDescription = data.weather[0].description; // description of current weather
     var currentTemp = data.main.temp; // actual temp
     var feelsLike = data.feels_like; // feels like temp
-    var lastUpdated = ''; // time last updated   
+    var lastUpdated = data.dt; // time last updated   
 
     var locationDisplay = document.createElement('h2');
     locationDisplay.textContent = city + ', ' + country;
@@ -96,7 +106,7 @@ function updateDisplay(data) {
     var mapLinkDisplay = document.createElement('a');
     mapLinkDisplay.href = mapLink;
     mapLinkDisplay.target = "_blank";
-    mapLinkDisplay.tectContent = "Click to view map";
+    mapLinkDisplay.textContent = "Click to view map";
     weatherDisplay.appendChild(mapLinkDisplay);
         // <a href="" target="_BLANK"/a>
 
@@ -112,17 +122,17 @@ function updateDisplay(data) {
         // <p style="text-transform: capitalize;"> </p><br>
 
     var currentTempDisplay = document.createElement('p');
-    currentTempDisplay.textContent = currentTemp;
+    currentTempDisplay.textContent = 'Current: ' + currentTemp + '°F';
     weatherDisplay.appendChild(currentTempDisplay);
         // <p>Current: 53.74° F</p>
 
     var feelsLikeDisplay = document.createElement('p');
-    feelsLikeDisplay.textContent = feelsLike;
+    feelsLikeDisplay.textContent = 'Feels like: ' + feelsLike + '°F';
     weatherDisplay.appendChild(feelsLikeDisplay);
         // <p>Feels like: 51.69° F</p><br>
 
     var lastUpdatedDisplay = document.createElement('p');
-    lastUpdatedDisplay.textContent = lastUpdated;
+    lastUpdatedDisplay.textContent = 'Last updated: ' + lastUpdated;
     weatherDisplay.appendChild(lastUpdatedDisplay);
         // <p>Last updated: 11:00 PM</p>
     ;
