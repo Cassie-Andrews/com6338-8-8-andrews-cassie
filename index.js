@@ -92,12 +92,17 @@ function updateDisplay(data) {
 
     var city = data.name; // city code
     var country = data.sys.country; // country code
-    var mapLink = ''; // google maps link to location
+    var mapLink = "https://www.google.com/maps/search/?api=1&query=" + data.coord.lat + "," + data.coord.lon; // google maps link to location
     var weatherIcon = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'; // weather icon representing current conditions
     var weatherDescription = data.weather[0].description; // description of current weather
     var currentTemp = data.main.temp; // actual temp
     var feelsLike = data.feels_like; // feels like temp
-    var lastUpdated = data.dt; // time last updated   
+    
+    var date = new Date(1000); // time last updated   
+    var timeString = date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit'
+    })
 
     var locationDisplay = document.createElement('h2');
     locationDisplay.textContent = city + ', ' + country;
@@ -132,7 +137,7 @@ function updateDisplay(data) {
         // <p>Feels like: 51.69° F</p><br>
 
     var lastUpdatedDisplay = document.createElement('p');
-    lastUpdatedDisplay.textContent = 'Last updated: ' + lastUpdated;
+    lastUpdatedDisplay.textContent = 'Last updated: ' + timeString;
     weatherDisplay.appendChild(lastUpdatedDisplay);
         // <p>Last updated: 11:00 PM</p>
     ;
