@@ -108,9 +108,11 @@ function updateDisplay(data) {
     weatherDisplay.appendChild(weatherIconDisplay);
         // <img src="">
 
+    var breakElement = document.createElement('br');
     var weatherDescriptionDisplay = document.createElement('p');
     weatherDescriptionDisplay.textContent = weatherDescription;
     weatherDisplay.appendChild(weatherDescriptionDisplay);
+    weatherDisplay.appendChild(breakElement);
         // <p style="text-transform: capitalize;"> </p><br>
 
     var currentTempDisplay = document.createElement('p');
@@ -118,9 +120,11 @@ function updateDisplay(data) {
     weatherDisplay.appendChild(currentTempDisplay);
         // <p>Current: 53.74° F</p>
 
+    var breakElement = document.createElement('br');
     var feelsLikeDisplay = document.createElement('p');
     feelsLikeDisplay.textContent = 'Feels like: ' + feelsLike + '°F';
     weatherDisplay.appendChild(feelsLikeDisplay);
+    weatherDisplay.appendChild(breakElement);
         // <p>Feels like: 51.69° F</p><br>
 
     var lastUpdatedDisplay = document.createElement('p');
