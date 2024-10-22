@@ -26,7 +26,7 @@ form.onsubmit = function(e) {
     e.preventDefault();
 
     var userQuery = input.value.trim();
-        console.log(userQuery);
+        console.log("User input:" + " " + userQuery);
 
     if (!userQuery) return; // if no input, exit
 
@@ -39,22 +39,22 @@ form.onsubmit = function(e) {
     
     fetch(fetchURL)
         .then(function(response) {
-            if (!response.ok) { // LOCATION NOT FOUND
-                if (response.status === 404) {
-                    // notify the user that the location was not found
-                    showLocationNotFound();
-                    input.value = ''; // clear inpur value
-                }
-                return; // exit if not found
-            }  // LOCATION FOUND
+            console.log("Response Status:" + " " + response.status);
+            
+            // LOCATION NOT FOUND
+            if (response.status === 404) { 
+                // notify the user that the location was not found
+                showLocationNotFound();
+                input.value = ''; // clear inpur value
+                // return; // exit if not found
+            }  
+            // LOCATION FOUND
             return response.json(); // if user entered search term that is found, retrieve data
         })
         .then(function(data) { // UPDATE DISPLAY
-            if (data) {
-                console.log(data);
-                updateDisplay(data); // call function to display weather info
-                input.value = ''; // clear input value
-            }
+            console.log(data);
+            updateDisplay(data); // call function to display weather info
+            input.value = ''; // clear input value
         });
 }
 
@@ -90,13 +90,14 @@ function updateDisplay(data) {
         minute: '2-digit'
     })
 
-    console.log("City:" + city);
-    console.log("Country:" + country);
-    console.log("Map link:" + mapLink);
-    console.log("Icon" + weatherIcon);
-    console.log("Description" + weatherDescription);
-    console.log("Temp:" + currentTemp);
-    console.log("Feels like:" + feelsLike);
+    console.log("City:" + " " + city);
+    console.log("Country:" + " " + country);
+    console.log("Map link:" + " " + mapLink);
+    console.log("Icon link:" + " " + weatherIcon);
+    console.log("Description:" + " " + weatherDescription);
+    console.log("Temp:" + " " + currentTemp);
+    console.log("Feels like temp:" + " " + feelsLike);
+    console.log("Last updated:" + " " + timeString);
 
 
     var locationDisplay = document.createElement('h2');
