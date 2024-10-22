@@ -1,22 +1,13 @@
-
-// Geocoder API to convert city names and zip codes to geo coords
-// API call: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-    // ?q={user input}
-    // &limit=1
-    // &appid=a8b8566d914e7ee5f3e4973ebeb94b48
-// API Key: a8b8566d914e7ee5f3e4973ebeb94b48
-
-// GEOCODER var weatherURL = 'http://api.openweathermap.org/geo/1.0/direct';
 var weatherURL = 'https://api.openweathermap.org/data/2.5/weather';
-// var apiKey = 'a8b8566d914e7ee5f3e4973ebeb94b48';
-
+// API Key: a8b8566d914e7ee5f3e4973ebeb94b48
 
 var weatherAppDiv = document.getElementById('weather-app');
 var form = document.querySelector('form');
 var input = document.getElementById('weather-search');
 const weatherDisplay = document.getElementById('weather');
 
-// When the app loads
+
+// ON APP LOAD
     // only the input field and search button should be visible
     // this is already in the HTML
 
@@ -27,12 +18,8 @@ form.onsubmit = function(e) {
 
     var userQuery = input.value.trim();
         console.log("User input:" + " " + userQuery);
-
-    if (!userQuery) return; // if no input, exit
-
-
     
-    // construct the fetch URL
+        // construct the fetch URL
     var queryString = '?units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48&q=' + userQuery;
     var fetchURL = weatherURL + queryString;
     // app should call the Open Weather API's current weather endpoint using the JS fetch API to obtain weather data based on location entered by the user
@@ -46,15 +33,17 @@ form.onsubmit = function(e) {
                 // notify the user that the location was not found
                 showLocationNotFound();
                 input.value = ''; // clear inpur value
-                // return; // exit if not found
+                return; // exit if not found
             }  
             // LOCATION FOUND
             return response.json(); // if user entered search term that is found, retrieve data
         })
         .then(function(data) { // UPDATE DISPLAY
-            console.log(data);
-            updateDisplay(data); // call function to display weather info
-            input.value = ''; // clear input value
+            if (data) {
+                console.log(data);
+                updateDisplay(data); // call function to display weather info
+                input.value = ''; // clear input value
+            }
         });
 }
 
