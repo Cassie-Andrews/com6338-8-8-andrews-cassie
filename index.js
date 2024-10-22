@@ -26,21 +26,17 @@ form.onsubmit = function(e) {
     e.preventDefault();
 
     var userQuery = input.value.trim();
-    console.log(userQuery);
+        console.log(userQuery);
 
     if (!userQuery) return; // if no input, exit
 
-    // construct the fetch URL
-    var queryString = '?q=' + userQuery + '&units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48';
-        // '&units=imperial'
-    var fetchURL = weatherURL + queryString;
-        // full API call: http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-            // ?q={user input}
-            // &limit=1
-            // &appid=a8b8566d914e7ee5f3e4973ebeb94b48
-            // API Key: a8b8566d914e7ee5f3e4973ebeb94b48
 
+    
+    // construct the fetch URL
+    var queryString = '?units=imperial&appid=a8b8566d914e7ee5f3e4973ebeb94b48&q=' + userQuery;
+    var fetchURL = weatherURL + queryString;
     // app should call the Open Weather API's current weather endpoint using the JS fetch API to obtain weather data based on location entered by the user
+    
     fetch(fetchURL)
         .then(function(response) {
             if (!response.ok) { // LOCATION NOT FOUND
@@ -80,29 +76,28 @@ function showLocationNotFound() {
 function updateDisplay(data) {
     weatherDisplay.innerHTML = ''; // clear
 
-    console.log(
-        data.name,
-        data.sys.city,
-        data.sys.country,
-        data.weather[0],
-        data.main.temp,
-        data.feels_like,
-        data.dt
-    );
-
     var city = data.name; // city code
     var country = data.sys.country; // country code
     var mapLink = "https://www.google.com/maps/search/?api=1&query=" + data.coord.lat + "," + data.coord.lon; // google maps link to location
     var weatherIcon = 'https://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'; // weather icon representing current conditions
     var weatherDescription = data.weather[0].description; // description of current weather
     var currentTemp = data.main.temp; // actual temp
-    var feelsLike = data.feels_like; // feels like temp
+    var feelsLike = data.main.feels_like; // feels like temp
     
     var date = new Date(1000); // time last updated   
     var timeString = date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit'
     })
+
+    console.log("City:" + city);
+    console.log("Country:" + country);
+    console.log("Map link:" + mapLink);
+    console.log("Icon" + weatherIcon);
+    console.log("Description" + weatherDescription);
+    console.log("Temp:" + currentTemp);
+    console.log("Feels like:" + feelsLike);
+
 
     var locationDisplay = document.createElement('h2');
     locationDisplay.textContent = city + ', ' + country;
