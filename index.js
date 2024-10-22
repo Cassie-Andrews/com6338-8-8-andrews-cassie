@@ -84,7 +84,8 @@ function updateDisplay(data) {
     var currentTemp = data.main.temp; // actual temp
     var feelsLike = data.main.feels_like; // feels like temp
     
-    var date = new Date(1000); // time last updated   
+    var dataTime = data.dt * 1000; // Time of data calculation, unix, UTC
+    var date = new Date(dataTime); // time last updated   
     var timeString = date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit'
@@ -97,6 +98,7 @@ function updateDisplay(data) {
     console.log("Description:" + " " + weatherDescription);
     console.log("Temp:" + " " + currentTemp);
     console.log("Feels like temp:" + " " + feelsLike);
+    console.log("dt:" + " " + dataTime);
     console.log("Last updated:" + " " + timeString);
 
 
